@@ -77,5 +77,14 @@ namespace EustonLeisure.Properties {
                 return ResourceManager.GetString("InvalidInput", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong file format.
+        /// </summary>
+        internal static string WrongFileFormat {
+            get {
+                return ResourceManager.GetString("WrongFileFormat", resourceCulture);
+            }
+        }
     }
 }

@@ -54,22 +54,36 @@ namespace EustonLeisure
         public static Dictionary<MessageWrapper, Message> DeserializeFromJson(string path)
         {
             Dictionary<MessageWrapper, Message> messages = new Dictionary<MessageWrapper, Message>();
+            List<MessageWrapper> rawMessages = new List<MessageWrapper>();
 
             try
             {
-                string json = File.ReadAllText(@path);
-                List<MessageWrapper> rawMessages = JsonConvert.DeserializeObject<List<MessageWrapper>>(json);
+                string json = File.ReadAllText(path);
+                rawMessages = JsonConvert.DeserializeObject<List<MessageWrapper>>(json);
+            }
+            catch (Newtonsoft.Json.JsonReaderException readerException)
+            {
+                Console.WriteLine(readerException);
+                throw;
+            }
+            catch (IOException ioException)
+            {
+                Console.WriteLine(ioException);
+                throw;
+            }
 
-                string messageId;
-                string sender;
-                string body;
+            string messageId;
+            string sender;
+            string body;
 
-                foreach (var rawMessage in rawMessages)
+            foreach (var rawMessage in rawMessages)
+            {
+                messageId = rawMessage.MessageId;
+                sender = rawMessage.Sender;
+                body = rawMessage.Body;
+
+                try
                 {
-                    messageId = rawMessage.MessageId;
-                    sender = rawMessage.Sender;
-                    body = rawMessage.Body;
-
                     if (messageId.StartsWith("E"))
                     {
                         EmailMessage email = new EmailMessage(sender, rawMessage.Subject, body);
@@ -86,11 +100,15 @@ namespace EustonLeisure
                         messages.Add(rawMessage, tweet);
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+                catch (ArgumentException argumentException)
+                {
+                    Console.WriteLine(argumentException);
+                    messages.Add(rawMessage, null);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
 
             return messages;

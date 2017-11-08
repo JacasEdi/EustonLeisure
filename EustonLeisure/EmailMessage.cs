@@ -1,11 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace EustonLeisure
 {
-    internal class EmailMessage : Message
+    internal sealed class EmailMessage : Message
     {
+        private static readonly List<string> Incidents = new List<string>
+        {
+            "theft of properties", "staff attack", "device damage", "sport injury", "personal info leak",
+            "raid", "customer attack", "staff abuse", "bomb threat", "terrorism", "suspicious incident"
+        };
+        private string _centreCode;
+        private string _natureOfIncident;
+
         // assign an id to each new instance of a class
         private static int _idCounter = 100000000;
 
@@ -19,8 +31,35 @@ namespace EustonLeisure
             return false;
         }
 
-        // check whether input is valid for an e-mail message
-        private bool IsValid(string sender, string subject, string message)
+        public EmailMessage(string sender, string subject, string message)
+        {
+            if (subject.StartsWith("SIR"))
+            {
+                // if input is invalid, do not create the object and throw an exception instead
+                if (!IsSirEmailValid(sender, subject, message))
+                {
+                    throw new ArgumentException("Invalid input");
+                }
+
+                SirForm.SeriousIncidents.Add(new SeriousIncident(_centreCode, _natureOfIncident));
+            }
+            else
+            {
+                // if input is invalid, do not create the object and throw an exception instead
+                if (!IsEmailValid(sender, subject, message))
+                {
+                    throw new ArgumentException("Invalid input");
+                }
+            }
+
+            Sender = sender;
+            Subject = subject;
+            Body = QuarantineUrls(message);
+            MessageId = "E" + _idCounter++;
+        }
+
+        // checks whether input is valid for a standard e-mail message
+        private static bool IsEmailValid(string sender, string subject, string message)
         {
             try
             {
@@ -33,27 +72,51 @@ namespace EustonLeisure
                 return false;
             }
         }
-
-        public EmailMessage(string sender, string subject, string message)
+       
+        // checks whether input is valid for a SIR e-mail message
+        private bool IsSirEmailValid(string sender, string subject, string message)
         {
-            if (subject.StartsWith("SIR"))
+            try
             {
-                //TODO stick some static ValidateSir(sender, subject, message) method here and delete SirEmailMessage class
-                SirEmailMessage sirEmail = new SirEmailMessage(sender, subject, message);
+                var mail = new System.Net.Mail.MailAddress(sender);
+
+                bool validSubject = ValidateSirSubject();
+                bool validMessage = ValidateSirMessage();
+
+                return validSubject && validMessage;
             }
-            else
+            catch
             {
-                // if input is invalid, do not create the object and throw an exception instead
-                if (!IsValid(sender, subject, message))
-                {
-                    throw new ArgumentException("Invalid input");
-                }
+                return false;
             }
 
-            Sender = sender;
-            Subject = subject;
-            Body = QuarantineUrls(message);
-            MessageId = "E" + _idCounter++;
+            bool ValidateSirSubject()
+            {
+                bool validDate = DateTime.TryParseExact(subject.Substring(4), "d'/'M'/'yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt);
+
+                return subject.StartsWith("SIR ") && validDate;
+            }
+
+            bool ValidateSirMessage()
+            {
+                Regex regex = new Regex(@"^\d{2}-\d{3}-\d{2}");
+                Match match = regex.Match(message);
+
+                StringReader strReader = new StringReader(message);
+
+                try
+                {
+                    _centreCode = strReader.ReadLine();
+                    _natureOfIncident = strReader.ReadLine();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
+                return match.Success && Incidents.Any(incident => _natureOfIncident.Equals(incident, StringComparison.CurrentCultureIgnoreCase));
+            }
         }
 
         private string QuarantineUrls(string message)

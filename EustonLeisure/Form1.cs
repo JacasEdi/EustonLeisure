@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -111,12 +112,20 @@ namespace EustonLeisure
 
                 case 3:
                     var counter = 1;
+
                     foreach (var message in _messagesFromFile)
                     {
                         tbOutput.AppendText("MESSAGE #" + counter++ + "\n");
-                        tbOutput.AppendText(message.Value + "\r\n\r\n");
 
-                        _processedMessages.Add(message.Value);
+                        if (message.Value == null)
+                        {
+                            tbOutput.AppendText("Invalid message format\r\n\r\n");
+                            _processedMessages.Add(message.Value);
+                        }
+                        else
+                        {
+                            tbOutput.AppendText(message.Value + "\r\n\r\n");
+                        }
                     }
 
                     break;
@@ -157,19 +166,44 @@ namespace EustonLeisure
 
             if (result == DialogResult.OK) // Test result.
             {
+                tbOutput.Clear();
                 var path = openFileDialog1.FileName;
-                _messagesFromFile = Utils.DeserializeFromJson(path);
 
-                var counter = 1;
-
-                foreach (var message in _messagesFromFile)
+                try
                 {
-                    tbFileUnprocessed.AppendText("MESSAGE #" + counter++ + "\n");
-                    tbFileUnprocessed.AppendText(message.Key + "\r\n\r\n");
-                }
+                    _messagesFromFile = Utils.DeserializeFromJson(path);
 
-                tbFileUnprocessed.Select(0,0);
-                tbFileUnprocessed.ScrollToCaret();
+                    var counter = 1;
+
+                    foreach (var message in _messagesFromFile)
+                    {
+                        tbFileUnprocessed.AppendText("MESSAGE #" + counter++ + "\n");
+                        tbFileUnprocessed.AppendText(message.Key + "\r\n\r\n");
+                    }
+
+                    tbFileUnprocessed.Select(0, 0);
+                    tbFileUnprocessed.ScrollToCaret();
+                }
+                catch (IOException ioException)
+                {
+                    Console.WriteLine(ioException);
+                    tbOutput.Text = Properties.Resources.WrongFileFormat;
+                }
+                catch (Newtonsoft.Json.JsonReaderException readerException)
+                {
+                    Console.WriteLine(readerException);
+                    tbOutput.Text = Properties.Resources.WrongFileFormat;
+                }
+                catch (ArgumentException argumentException)
+                {
+                    Console.WriteLine(argumentException);
+                    tbOutput.Text = Properties.Resources.InvalidInput;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    tbOutput.Text = Properties.Resources.GenericError;
+                }
             }
         }
 
