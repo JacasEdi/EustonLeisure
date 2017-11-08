@@ -11,17 +11,17 @@ namespace EustonLeisure
         // assign an id to each new instance of a class
         private static int _idCounter = 100000000;
 
-        public override string MessageId { get; set; } = "T" + _idCounter++;
+        public override string MessageId { get; set; }
         public override string Sender { get; set; }
         public override string Body { get; set; }
 
         // check whether input is valid for a tweet
         protected override bool IsValid(string sender, string message)
         {
-            if (sender.StartsWith("@") && sender.Length <= 16 && message.Length <= 140)
-                return true;
+            Regex regex = new Regex(@"(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)");
+            Match match = regex.Match(sender);
 
-            return false;
+            return match.Success && message.Length <= 140;
         }
 
         public TweetMessage(string sender, string message)
@@ -34,6 +34,8 @@ namespace EustonLeisure
 
             Sender = sender;
             Body = ProcessMessage(message);
+
+            MessageId = "T" + _idCounter++;
         }
 
         private string ProcessMessage(string message)
@@ -91,5 +93,9 @@ namespace EustonLeisure
             }
         }
 
+        public override string ToString()
+        {
+            return $"Message Id: {MessageId}\r\nSender: {Sender}\r\nMessage: {Body}";
+        }
     }
 }

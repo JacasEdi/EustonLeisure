@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
@@ -32,15 +33,83 @@ namespace EustonLeisure
             return textwords;
         }
 
-        private void SaveToJson(Person p)
+        public static void SerializeToJson(List<Message> messages)
         {
-            // serialize JSON directly to a file
-            using (StreamWriter file = File.CreateText(@"C:\Napier\Software Engineering\messages.json"))
+            string json = JsonConvert.SerializeObject(messages, Formatting.Indented);
+
+            try
             {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, p);
+                using (StreamWriter file = File.CreateText(@"C:\Napier\Software Engineering\messages.json"))
+                {
+                    file.Write(json);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
 
+        public static Dictionary<MessageWrapper, Message> DeserializeFromJson(string path)
+        {
+            Dictionary<MessageWrapper, Message> messages = new Dictionary<MessageWrapper, Message>();
+
+            try
+            {
+                string json = File.ReadAllText(@path);
+                List<MessageWrapper> rawMessages = JsonConvert.DeserializeObject<List<MessageWrapper>>(json);
+
+                string messageId;
+                string sender;
+                string body;
+
+                foreach (var rawMessage in rawMessages)
+                {
+                    messageId = rawMessage.MessageId;
+                    sender = rawMessage.Sender;
+                    body = rawMessage.Body;
+
+                    if (messageId.StartsWith("E"))
+                    {
+                        EmailMessage email = new EmailMessage(sender, rawMessage.Subject, body);
+                        messages.Add(rawMessage, email);
+                    }
+                    else if (messageId.StartsWith("S"))
+                    {
+                        SmsMessage sms = new SmsMessage(sender, body);
+                        messages.Add(rawMessage, sms);
+                    }
+                    else if (messageId.StartsWith("T"))
+                    {
+                        TweetMessage tweet = new TweetMessage(sender, body);
+                        messages.Add(rawMessage, tweet);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return messages;
+        }
+
+        public class MessageWrapper
+        {
+            public string MessageId { get; set; }
+            public string Sender { get; set; }
+            public string Subject { get; set; }
+            public string Body { get; set; }
+
+            public override string ToString()
+            {
+                if (Subject == null)
+                    return $"Message Id: {MessageId}\r\nSender: {Sender}\r\nMessage: {Body}";
+
+                return $"Message Id: {MessageId}\r\nSender: {Sender}\r\nSubject: {Subject}\r\nMessage: {Body}";
+            }
+        }
     }
 }

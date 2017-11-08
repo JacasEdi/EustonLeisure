@@ -9,7 +9,7 @@ namespace EustonLeisure
         // assign an id to each new instance of a class
         private static int _idCounter = 100000000;
 
-        public override string MessageId { get; set; } = "E" + _idCounter++;
+        public override string MessageId { get; set; }
         public override string Sender { get; set; }
         public string Subject { get; set; }
         public override string Body { get; set; }
@@ -36,15 +36,24 @@ namespace EustonLeisure
 
         public EmailMessage(string sender, string subject, string message)
         {
-            // if input is invalid, do not create the object and throw an exception instead
-            if (!IsValid(sender, subject, message))
+            if (subject.StartsWith("SIR"))
             {
-                throw new ArgumentException("Invalid input");
+                //TODO stick some static ValidateSir(sender, subject, message) method here and delete SirEmailMessage class
+                SirEmailMessage sirEmail = new SirEmailMessage(sender, subject, message);
+            }
+            else
+            {
+                // if input is invalid, do not create the object and throw an exception instead
+                if (!IsValid(sender, subject, message))
+                {
+                    throw new ArgumentException("Invalid input");
+                }
             }
 
             Sender = sender;
             Subject = subject;
             Body = QuarantineUrls(message);
+            MessageId = "E" + _idCounter++;
         }
 
         private string QuarantineUrls(string message)
@@ -63,6 +72,11 @@ namespace EustonLeisure
             }
 
             return sb.ToString();
+        }
+
+        public override string ToString()
+        {
+            return $"Message Id: {MessageId}\r\nSender: {Sender}\r\nSubject: {Subject}\r\nMessage: {Body}";
         }
     }
 }

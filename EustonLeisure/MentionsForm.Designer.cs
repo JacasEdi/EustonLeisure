@@ -38,13 +38,17 @@ namespace EustonLeisure
             // 
             // tbMentions
             // 
-            this.tbMentions.BackColor = System.Drawing.Color.White;
+            this.tbMentions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbMentions.BackColor = System.Drawing.SystemColors.Control;
             this.tbMentions.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbMentions.ForeColor = System.Drawing.Color.Black;
             this.tbMentions.Location = new System.Drawing.Point(13, 13);
             this.tbMentions.Multiline = true;
             this.tbMentions.Name = "tbMentions";
             this.tbMentions.ReadOnly = true;
+            this.tbMentions.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbMentions.Size = new System.Drawing.Size(357, 295);
             this.tbMentions.TabIndex = 1;
             // 

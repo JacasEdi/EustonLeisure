@@ -1,6 +1,6 @@
 ﻿namespace EustonLeisure
 {
-    abstract class Message
+    public abstract class Message
     {
         public abstract string MessageId { get; set; }
 

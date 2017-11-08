@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace EustonLeisure
@@ -7,37 +9,36 @@ namespace EustonLeisure
     public partial class Form1 : Form
     {
         public static readonly Dictionary<string, string> Textwords = Utils.GetTextwords();
+        private List<Message> _processedMessages = new List<Message>();
+        private Dictionary<Utils.MessageWrapper, Message> _messagesFromFile = new Dictionary<Utils.MessageWrapper, Message>();
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void btnTrending_Click(object sender, EventArgs e)
+        private void BtnTrending_Click(object sender, EventArgs e)
         {
             TrendingForm trending = new TrendingForm();
             trending.Show();
-
         }
 
-        private void btnMentions_Click(object sender, EventArgs e)
+        private void BtnMentions_Click(object sender, EventArgs e)
         {
             MentionsForm mentions = new MentionsForm();
             mentions.Show();
-
         }
 
-        private void btnSir_Click(object sender, EventArgs e)
+        private void BtnSir_Click(object sender, EventArgs e)
         {
             SirForm sir = new SirForm();
             sir.Show();
         }
 
-        private void btnSubmit_Click(object sender, EventArgs e)
+        private void BtnSubmit_Click(object sender, EventArgs e)
         {
+            tbOutput.Clear();
             int activeTab = tabMessageSelection.SelectedIndex;
-            Console.WriteLine("Active tab " + activeTab);
-
             string messageSender = tbSender.Text;
 
             switch (activeTab)
@@ -47,26 +48,18 @@ namespace EustonLeisure
                     {
                         try
                         {
-                            if (tbEmailSubject.Text.StartsWith("SIR"))
-                            {
-                                SirEmailMessage sirEmail =
-                                    new SirEmailMessage(messageSender, tbEmailSubject.Text, tbEmailBody.Text);
-                                tbOutput.Text = sirEmail.Body;
-                            }
-                            else
-                            {
-                                EmailMessage email = new EmailMessage(messageSender, tbEmailSubject.Text, tbEmailBody.Text);
-                                tbOutput.Text = email.Body;
-                            }
+                            EmailMessage email = new EmailMessage(messageSender, tbEmailSubject.Text, tbEmailBody.Text);
+                            tbOutput.Text = email.Body;
 
+                            _processedMessages.Add(email);
                         }
-                        catch (ArgumentException argException)
+                        catch (ArgumentException)
                         {
-                            tbOutput.Text = "Invalid input";
+                            tbOutput.Text = Properties.Resources.InvalidInput;
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
-                            tbOutput.Text = "Error";
+                            tbOutput.Text = Properties.Resources.GenericError;
                         }
 
                         break;
@@ -80,14 +73,16 @@ namespace EustonLeisure
 
                             SmsMessage sms = new SmsMessage(messageSender, message);
                             tbOutput.Text = sms.Body;
+
+                            _processedMessages.Add(sms);
                         }
-                        catch (ArgumentException argException)
+                        catch (ArgumentException)
                         {
-                            tbOutput.Text = "Invalid input";
+                            tbOutput.Text = Properties.Resources.InvalidInput;
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
-                            tbOutput.Text = "Error";
+                            tbOutput.Text = Properties.Resources.GenericError;
                         }
 
                         break;
@@ -99,23 +94,40 @@ namespace EustonLeisure
                         {
                             TweetMessage tweet = new TweetMessage(messageSender, tbTweetBody.Text);
                             tbOutput.Text = tweet.Body;
+
+                            _processedMessages.Add(tweet);
                         }
-                        catch (ArgumentException argException)
+                        catch (ArgumentException)
                         {
-                            tbOutput.Text = "Invalid input";
+                            tbOutput.Text = Properties.Resources.InvalidInput;
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
-                            tbOutput.Text = "Error";
+                            tbOutput.Text = Properties.Resources.GenericError;
                         }
 
                         break;
                     }
+
+                case 3:
+                    var counter = 1;
+                    foreach (var message in _messagesFromFile)
+                    {
+                        tbOutput.AppendText("MESSAGE #" + counter++ + "\n");
+                        tbOutput.AppendText(message.Value + "\r\n\r\n");
+
+                        _processedMessages.Add(message.Value);
+                    }
+
+                    break;
             }
+
+            tbOutput.Select(0, 0);
+            tbOutput.ScrollToCaret();
         }
 
-        // clear all text boxes
-        private void btnClear_Click(object sender, EventArgs e)
+        // clears all text boxes
+        private void BtnClear_Click(object sender, EventArgs e)
         {
             tbSender.Clear();
 
@@ -128,8 +140,56 @@ namespace EustonLeisure
                 tbSmsBody.Clear();
             else if (tabMessageSelection.SelectedTab == tabTweet)
                 tbTweetBody.Clear();
+            else if (tabMessageSelection.SelectedTab == tabFile)
+                tbFileUnprocessed.Clear();
 
             tbOutput.Clear();
+        }
+
+        private void BtnBrowse_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+
+            tbFileUnprocessed.Clear();
+
+            if (_messagesFromFile.Any())
+                _messagesFromFile.Clear();
+
+            if (result == DialogResult.OK) // Test result.
+            {
+                var path = openFileDialog1.FileName;
+                _messagesFromFile = Utils.DeserializeFromJson(path);
+
+                var counter = 1;
+
+                foreach (var message in _messagesFromFile)
+                {
+                    tbFileUnprocessed.AppendText("MESSAGE #" + counter++ + "\n");
+                    tbFileUnprocessed.AppendText(message.Key + "\r\n\r\n");
+                }
+
+                tbFileUnprocessed.Select(0,0);
+                tbFileUnprocessed.ScrollToCaret();
+            }
+        }
+
+        private void TabMessageSelection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabMessageSelection.SelectedTab == tabFile)
+            {
+                tbSender.BackColor = tbOutput.BackColor;
+                tbSender.ReadOnly = true;
+            }
+            else
+            {
+                tbSender.BackColor = Color.White;
+                tbSender.ReadOnly = false;
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.SerializeToJson(_processedMessages);
         }
     }
 }

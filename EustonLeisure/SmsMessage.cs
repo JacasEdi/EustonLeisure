@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
+using com.google.i18n.phonenumbers;
 
 namespace EustonLeisure
 {
@@ -11,14 +10,26 @@ namespace EustonLeisure
         // assign an id to each new instance of a class
         private static int _idCounter = 100000000;
 
-        public override string MessageId { get; set; } = "S" + _idCounter++;
+        public override string MessageId { get; set; }
         public override string Sender { get; set; }
         public override string Body { get; set; }
 
-        // check whether input is valid for sms
         protected override bool IsValid(string sender, string message)
         {
-            return Int64.TryParse(sender, out long result) && message.Length <= 140;
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+            bool isValid = false;
+
+            try
+            {
+                Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse(sender, "GB");
+                isValid = phoneUtil.isValidNumber(phoneNumber);
+            }
+            catch (NumberParseException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            return isValid && message.Length <= 140;
         }
 
         public SmsMessage(string sender, string message)
@@ -31,11 +42,13 @@ namespace EustonLeisure
 
             Sender = sender;
             Body = ProcessMessage(message);
+
+            MessageId = "S" + _idCounter++;
         }
 
         private string ProcessMessage(string message)
         {
-            message = ExpandTextwords(message);          
+            message = ExpandTextwords(message);
 
             return message;
         }
@@ -60,6 +73,11 @@ namespace EustonLeisure
             }
 
             return sb.ToString();
+        }
+
+        public override string ToString()
+        {
+            return $"Message Id: {MessageId}\r\nSender: {Sender}\r\nMessage: {Body}";
         }
     }
 }

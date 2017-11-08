@@ -39,13 +39,17 @@ namespace EustonLeisure
             // 
             // tbHashtags
             // 
-            this.tbHashtags.BackColor = System.Drawing.Color.White;
+            this.tbHashtags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbHashtags.BackColor = System.Drawing.SystemColors.Control;
             this.tbHashtags.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbHashtags.ForeColor = System.Drawing.Color.Black;
             this.tbHashtags.Location = new System.Drawing.Point(13, 13);
             this.tbHashtags.Multiline = true;
             this.tbHashtags.Name = "tbHashtags";
             this.tbHashtags.ReadOnly = true;
+            this.tbHashtags.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbHashtags.Size = new System.Drawing.Size(357, 295);
             this.tbHashtags.TabIndex = 0;
             // 

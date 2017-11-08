@@ -33,13 +33,17 @@
             // 
             // tbIncidents
             // 
-            this.tbIncidents.BackColor = System.Drawing.Color.White;
+            this.tbIncidents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbIncidents.BackColor = System.Drawing.SystemColors.Control;
             this.tbIncidents.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbIncidents.ForeColor = System.Drawing.Color.Black;
             this.tbIncidents.Location = new System.Drawing.Point(13, 13);
             this.tbIncidents.Multiline = true;
             this.tbIncidents.Name = "tbIncidents";
             this.tbIncidents.ReadOnly = true;
+            this.tbIncidents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbIncidents.Size = new System.Drawing.Size(357, 295);
             this.tbIncidents.TabIndex = 1;
             // 

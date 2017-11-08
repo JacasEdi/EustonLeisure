@@ -34,9 +34,6 @@
             this.btnSirList = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.tabTweet = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbTweetBody = new System.Windows.Forms.TextBox();
             this.tabSms = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
             this.tbSmsBody = new System.Windows.Forms.TextBox();
@@ -46,104 +43,92 @@
             this.tbEmailSubject = new System.Windows.Forms.TextBox();
             this.tbEmailBody = new System.Windows.Forms.TextBox();
             this.tabMessageSelection = new System.Windows.Forms.TabControl();
-            this.labelSender = new System.Windows.Forms.Label();
+            this.tabTweet = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbTweetBody = new System.Windows.Forms.TextBox();
+            this.tabFile = new System.Windows.Forms.TabPage();
+            this.tbFileUnprocessed = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.tbSender = new System.Windows.Forms.TextBox();
-            this.tabTweet.SuspendLayout();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.labelSender = new System.Windows.Forms.Label();
+            this.labelOutput = new System.Windows.Forms.Label();
             this.tabSms.SuspendLayout();
             this.tabEmail.SuspendLayout();
             this.tabMessageSelection.SuspendLayout();
+            this.tabTweet.SuspendLayout();
+            this.tabFile.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbOutput
             // 
-            this.tbOutput.BackColor = System.Drawing.Color.White;
+            this.tbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbOutput.BackColor = System.Drawing.SystemColors.Control;
             this.tbOutput.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbOutput.Location = new System.Drawing.Point(12, 328);
+            this.tbOutput.Location = new System.Drawing.Point(12, 353);
             this.tbOutput.Multiline = true;
             this.tbOutput.Name = "tbOutput";
             this.tbOutput.ReadOnly = true;
-            this.tbOutput.Size = new System.Drawing.Size(614, 161);
+            this.tbOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbOutput.Size = new System.Drawing.Size(614, 136);
             this.tbOutput.TabIndex = 1;
-            this.tbOutput.Text = "Processed output";
             // 
             // btnTrendingList
             // 
+            this.btnTrendingList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnTrendingList.Location = new System.Drawing.Point(12, 504);
             this.btnTrendingList.Name = "btnTrendingList";
             this.btnTrendingList.Size = new System.Drawing.Size(131, 30);
             this.btnTrendingList.TabIndex = 2;
             this.btnTrendingList.Text = "Trending list";
             this.btnTrendingList.UseVisualStyleBackColor = true;
-            this.btnTrendingList.Click += new System.EventHandler(this.btnTrending_Click);
+            this.btnTrendingList.Click += new System.EventHandler(this.BtnTrending_Click);
             // 
             // btnMentionsList
             // 
-            this.btnMentionsList.Location = new System.Drawing.Point(250, 504);
+            this.btnMentionsList.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnMentionsList.Location = new System.Drawing.Point(239, 504);
             this.btnMentionsList.Name = "btnMentionsList";
             this.btnMentionsList.Size = new System.Drawing.Size(131, 30);
             this.btnMentionsList.TabIndex = 3;
             this.btnMentionsList.Text = "Mentions list";
             this.btnMentionsList.UseVisualStyleBackColor = true;
-            this.btnMentionsList.Click += new System.EventHandler(this.btnMentions_Click);
+            this.btnMentionsList.Click += new System.EventHandler(this.BtnMentions_Click);
             // 
             // btnSirList
             // 
+            this.btnSirList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSirList.Location = new System.Drawing.Point(495, 504);
             this.btnSirList.Name = "btnSirList";
             this.btnSirList.Size = new System.Drawing.Size(131, 30);
             this.btnSirList.TabIndex = 4;
             this.btnSirList.Text = "SIR list";
             this.btnSirList.UseVisualStyleBackColor = true;
-            this.btnSirList.Click += new System.EventHandler(this.btnSir_Click);
+            this.btnSirList.Click += new System.EventHandler(this.BtnSir_Click);
             // 
             // btnSubmit
             // 
+            this.btnSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSubmit.Location = new System.Drawing.Point(16, 559);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(93, 38);
             this.btnSubmit.TabIndex = 5;
             this.btnSubmit.Text = "Submit";
             this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            this.btnSubmit.Click += new System.EventHandler(this.BtnSubmit_Click);
             // 
             // btnClear
             // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClear.Location = new System.Drawing.Point(524, 559);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(93, 38);
             this.btnClear.TabIndex = 6;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // tabTweet
-            // 
-            this.tabTweet.BackColor = System.Drawing.Color.Transparent;
-            this.tabTweet.Controls.Add(this.label3);
-            this.tabTweet.Controls.Add(this.tbTweetBody);
-            this.tabTweet.Location = new System.Drawing.Point(4, 29);
-            this.tabTweet.Name = "tabTweet";
-            this.tabTweet.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTweet.Size = new System.Drawing.Size(606, 206);
-            this.tabTweet.TabIndex = 2;
-            this.tabTweet.Text = "Tweet";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 13);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(112, 20);
-            this.label3.TabIndex = 26;
-            this.label3.Text = "Message body";
-            // 
-            // tbTweetBody
-            // 
-            this.tbTweetBody.Location = new System.Drawing.Point(6, 36);
-            this.tbTweetBody.Multiline = true;
-            this.tbTweetBody.Name = "tbTweetBody";
-            this.tbTweetBody.Size = new System.Drawing.Size(581, 159);
-            this.tbTweetBody.TabIndex = 24;
+            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // tabSms
             // 
@@ -171,6 +156,7 @@
             this.tbSmsBody.Location = new System.Drawing.Point(6, 35);
             this.tbSmsBody.Multiline = true;
             this.tbSmsBody.Name = "tbSmsBody";
+            this.tbSmsBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbSmsBody.Size = new System.Drawing.Size(581, 159);
             this.tbSmsBody.TabIndex = 27;
             // 
@@ -218,6 +204,7 @@
             this.tbEmailBody.Location = new System.Drawing.Point(10, 87);
             this.tbEmailBody.Multiline = true;
             this.tbEmailBody.Name = "tbEmailBody";
+            this.tbEmailBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbEmailBody.Size = new System.Drawing.Size(577, 106);
             this.tbEmailBody.TabIndex = 14;
             // 
@@ -226,11 +213,96 @@
             this.tabMessageSelection.Controls.Add(this.tabEmail);
             this.tabMessageSelection.Controls.Add(this.tabSms);
             this.tabMessageSelection.Controls.Add(this.tabTweet);
+            this.tabMessageSelection.Controls.Add(this.tabFile);
             this.tabMessageSelection.Location = new System.Drawing.Point(12, 83);
             this.tabMessageSelection.Name = "tabMessageSelection";
             this.tabMessageSelection.SelectedIndex = 0;
             this.tabMessageSelection.Size = new System.Drawing.Size(614, 239);
             this.tabMessageSelection.TabIndex = 7;
+            this.tabMessageSelection.SelectedIndexChanged += new System.EventHandler(this.TabMessageSelection_SelectedIndexChanged);
+            // 
+            // tabTweet
+            // 
+            this.tabTweet.BackColor = System.Drawing.Color.Transparent;
+            this.tabTweet.Controls.Add(this.label2);
+            this.tabTweet.Controls.Add(this.label3);
+            this.tabTweet.Controls.Add(this.tbTweetBody);
+            this.tabTweet.Location = new System.Drawing.Point(4, 29);
+            this.tabTweet.Name = "tabTweet";
+            this.tabTweet.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTweet.Size = new System.Drawing.Size(606, 206);
+            this.tabTweet.TabIndex = 2;
+            this.tabTweet.Text = "Tweet";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 13);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(112, 20);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "Message body";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 20);
+            this.label3.TabIndex = 26;
+            // 
+            // tbTweetBody
+            // 
+            this.tbTweetBody.Location = new System.Drawing.Point(6, 36);
+            this.tbTweetBody.Multiline = true;
+            this.tbTweetBody.Name = "tbTweetBody";
+            this.tbTweetBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbTweetBody.Size = new System.Drawing.Size(581, 159);
+            this.tbTweetBody.TabIndex = 24;
+            // 
+            // tabFile
+            // 
+            this.tabFile.BackColor = System.Drawing.Color.Transparent;
+            this.tabFile.Controls.Add(this.tbFileUnprocessed);
+            this.tabFile.Controls.Add(this.btnBrowse);
+            this.tabFile.Location = new System.Drawing.Point(4, 29);
+            this.tabFile.Name = "tabFile";
+            this.tabFile.Padding = new System.Windows.Forms.Padding(3);
+            this.tabFile.Size = new System.Drawing.Size(606, 206);
+            this.tabFile.TabIndex = 3;
+            this.tabFile.Text = "File";
+            // 
+            // tbFileUnprocessed
+            // 
+            this.tbFileUnprocessed.BackColor = System.Drawing.Color.White;
+            this.tbFileUnprocessed.Location = new System.Drawing.Point(6, 6);
+            this.tbFileUnprocessed.Multiline = true;
+            this.tbFileUnprocessed.Name = "tbFileUnprocessed";
+            this.tbFileUnprocessed.ReadOnly = true;
+            this.tbFileUnprocessed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbFileUnprocessed.Size = new System.Drawing.Size(594, 149);
+            this.tbFileUnprocessed.TabIndex = 25;
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Location = new System.Drawing.Point(234, 161);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(101, 39);
+            this.btnBrowse.TabIndex = 0;
+            this.btnBrowse.Text = "Browse";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.BtnBrowse_Click);
+            // 
+            // tbSender
+            // 
+            this.tbSender.Location = new System.Drawing.Point(16, 43);
+            this.tbSender.Name = "tbSender";
+            this.tbSender.Size = new System.Drawing.Size(606, 26);
+            this.tbSender.TabIndex = 17;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // labelSender
             // 
@@ -241,18 +313,22 @@
             this.labelSender.TabIndex = 18;
             this.labelSender.Text = "Sender";
             // 
-            // tbSender
+            // labelOutput
             // 
-            this.tbSender.Location = new System.Drawing.Point(16, 43);
-            this.tbSender.Name = "tbSender";
-            this.tbSender.Size = new System.Drawing.Size(606, 26);
-            this.tbSender.TabIndex = 17;
+            this.labelOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelOutput.AutoSize = true;
+            this.labelOutput.Location = new System.Drawing.Point(12, 330);
+            this.labelOutput.Name = "labelOutput";
+            this.labelOutput.Size = new System.Drawing.Size(58, 20);
+            this.labelOutput.TabIndex = 19;
+            this.labelOutput.Text = "Output";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(648, 609);
+            this.Controls.Add(this.labelOutput);
             this.Controls.Add(this.labelSender);
             this.Controls.Add(this.tbSender);
             this.Controls.Add(this.tabMessageSelection);
@@ -264,13 +340,16 @@
             this.Controls.Add(this.tbOutput);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.tabTweet.ResumeLayout(false);
-            this.tabTweet.PerformLayout();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.tabSms.ResumeLayout(false);
             this.tabSms.PerformLayout();
             this.tabEmail.ResumeLayout(false);
             this.tabEmail.PerformLayout();
             this.tabMessageSelection.ResumeLayout(false);
+            this.tabTweet.ResumeLayout(false);
+            this.tabTweet.PerformLayout();
+            this.tabFile.ResumeLayout(false);
+            this.tabFile.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -283,9 +362,6 @@
         private System.Windows.Forms.Button btnSirList;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.TabPage tabTweet;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tbTweetBody;
         private System.Windows.Forms.TabPage tabSms;
         private System.Windows.Forms.TabPage tabEmail;
         private System.Windows.Forms.Label labelBody;
@@ -295,8 +371,17 @@
         private System.Windows.Forms.TabControl tabMessageSelection;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbSmsBody;
-        private System.Windows.Forms.Label labelSender;
         private System.Windows.Forms.TextBox tbSender;
+        private System.Windows.Forms.TabPage tabTweet;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbTweetBody;
+        private System.Windows.Forms.TabPage tabFile;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbFileUnprocessed;
+        private System.Windows.Forms.Label labelSender;
+        private System.Windows.Forms.Label labelOutput;
     }
 }
 

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace EustonLeisure
 {
-    internal class SirEmailMessage : EmailMessage
+    internal class SirEmailMessage
     {
         private static readonly List<string> Incidents = new List<string>
         {
@@ -18,7 +18,7 @@ namespace EustonLeisure
         private string _centreCode;
         private string _natureOfIncident;
 
-        public SirEmailMessage(string sender, string subject, string message) : base(sender, subject, message)
+        public SirEmailMessage(string sender, string subject, string message)
         {
             if (!IsValid(sender, subject, message))
             {
@@ -37,7 +37,7 @@ namespace EustonLeisure
 
                 bool validSubject = ValidateSirSubject(subject);
                 bool validMessage = ValidateSirMessage(message);
-                
+
                 return validSubject && validMessage;
             }
             catch
