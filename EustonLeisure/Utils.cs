@@ -68,9 +68,10 @@ namespace EustonLeisure
         {
             string json = JsonConvert.SerializeObject(messages, Formatting.Indented);
 
+            //attempt to create or append serialized messages to "processed messages.json" file inside program folder
             try
             {
-                using (StreamWriter file = File.CreateText(@"C:\Napier\Software Engineering\messages.json"))
+                using (StreamWriter file = File.CreateText(@".\processed messages.json"))
                 {
                     file.Write(json);
                 }
