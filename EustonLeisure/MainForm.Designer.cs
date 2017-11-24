@@ -1,6 +1,6 @@
 ﻿namespace EustonLeisure
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -338,7 +338,7 @@
             this.Controls.Add(this.btnMentionsList);
             this.Controls.Add(this.btnTrendingList);
             this.Controls.Add(this.tbOutput);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.tabSms.ResumeLayout(false);

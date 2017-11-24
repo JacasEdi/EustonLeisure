@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EustonLeisure
 {
+    /// <summary>
+    /// Stores list of mentions obtained from Tweet messsages and displays them to the user.
+    /// </summary>
     public partial class MentionsForm : Form
     {
-        public static List<String> Mentions = new List<string>();
+        public static List<string> Mentions = new List<string>();
 
         public MentionsForm()
         {

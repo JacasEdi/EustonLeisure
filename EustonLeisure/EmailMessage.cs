@@ -8,8 +8,14 @@ using System.Text.RegularExpressions;
 
 namespace EustonLeisure
 {
-    internal sealed class EmailMessage : Message
+    /// <summary>
+    /// Class that handles validation and processing of Email messages. It checks what kind of Email message it 
+    /// is intended to be (Standard or Serious Incident Report) and checkes whether input is valid for that type 
+    /// before creating and processing it.
+    /// </summary>
+    public sealed class EmailMessage : Message
     {
+        // list of all serious incidents that could be reported in SIR
         private static readonly List<string> Incidents = new List<string>
         {
             "theft of properties", "staff attack", "device damage", "sport injury", "personal info leak",
@@ -31,8 +37,15 @@ namespace EustonLeisure
             return false;
         }
 
+        /// <summary>
+        /// Constructor for EmailMessage. It determines whether standard or SIR email is an intended type and will
+        /// only create a new message if input is valid for that type, otherwise throws an exception.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="message"></param>
         public EmailMessage(string sender, string subject, string message)
         {
+            // attempt to create SIR email
             if (subject.StartsWith("SIR"))
             {
                 // if input is invalid, do not create the object and throw an exception instead
@@ -43,6 +56,7 @@ namespace EustonLeisure
 
                 SirForm.SeriousIncidents.Add(new SeriousIncident(_centreCode, _natureOfIncident));
             }
+            // attempt to create standard email
             else
             {
                 // if input is invalid, do not create the object and throw an exception instead
@@ -58,7 +72,12 @@ namespace EustonLeisure
             MessageId = "E" + _idCounter++;
         }
 
-        // checks whether input is valid for a standard e-mail message
+        /// <summary>
+        /// Checks whether input is valid for a standard email message.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="message"></param>
+        /// <returns>Returns true for valid message and false if it's invalid.</returns>
         private static bool IsEmailValid(string sender, string subject, string message)
         {
             try
@@ -72,8 +91,13 @@ namespace EustonLeisure
                 return false;
             }
         }
-       
-        // checks whether input is valid for a SIR e-mail message
+
+        /// <summary>
+        /// Checks whether input is valid for a SIR email message.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="message"></param>
+        /// <returns>Returns true for valid message and false if it's invalid.</returns>
         private bool IsSirEmailValid(string sender, string subject, string message)
         {
             try
@@ -81,7 +105,7 @@ namespace EustonLeisure
                 var mail = new System.Net.Mail.MailAddress(sender);
 
                 bool validSubject = ValidateSirSubject();
-                bool validMessage = ValidateSirMessage();
+                bool validMessage = ValidateSirBody();
 
                 return validSubject && validMessage;
             }
@@ -97,7 +121,7 @@ namespace EustonLeisure
                 return subject.StartsWith("SIR ") && validDate;
             }
 
-            bool ValidateSirMessage()
+            bool ValidateSirBody()
             {
                 Regex regex = new Regex(@"^\d{2}-\d{3}-\d{2}");
                 Match match = regex.Match(message);
@@ -119,6 +143,11 @@ namespace EustonLeisure
             }
         }
 
+        /// <summary>
+        /// Searches for URLs in email message and replaces them with "URL Quarantined".
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns>Returns message body without URLs.</returns>
         private string QuarantineUrls(string message)
         {
             Regex regex = new Regex(@"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?");

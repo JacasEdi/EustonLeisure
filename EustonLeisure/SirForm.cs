@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
 namespace EustonLeisure
 {
+    /// <summary>
+    /// Stores list of serious incidents obtained from SIR emails and displays them to the user.
+    /// </summary>
     public partial class SirForm : Form
     {
         public static List<SeriousIncident> SeriousIncidents = new List<SeriousIncident>();

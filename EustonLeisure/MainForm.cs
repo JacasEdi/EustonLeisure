@@ -7,13 +7,21 @@ using System.Windows.Forms;
 
 namespace EustonLeisure
 {
-    public partial class Form1 : Form
+    /// <summary>
+    /// Main class that handles user interaction with the program, reads the input and displays processed messages.
+    /// </summary>
+    public partial class MainForm : Form
     {
+        // stores Textspeak abbreviations that are then used by SmsMessage and TweetMessage classes
         public static readonly Dictionary<string, string> Textwords = Utils.GetTextwords();
+
+        // stores all processed messages from current input session so that they can be saved to a file at the end of it
         private List<Message> _processedMessages = new List<Message>();
+
+        // stores key-value pairs of unproccessed messages from a file and their processed version of a specific type
         private Dictionary<Utils.MessageWrapper, Message> _messagesFromFile = new Dictionary<Utils.MessageWrapper, Message>();
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -36,6 +44,12 @@ namespace EustonLeisure
             sir.Show();
         }
 
+        /// <summary>
+        /// Determines which type of message user attempts to send once "Submit" button is clicked and
+        /// attempts to object of this type.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSubmit_Click(object sender, EventArgs e)
         {
             tbOutput.Clear();
@@ -44,7 +58,7 @@ namespace EustonLeisure
 
             switch (activeTab)
             {
-                // Email message
+                // User attempts to send email
                 case 0:
                     {
                         try
@@ -65,7 +79,7 @@ namespace EustonLeisure
 
                         break;
                     }
-                // SMS message
+                // User attempts to send SMS
                 case 1:
                     {
                         try
@@ -88,7 +102,7 @@ namespace EustonLeisure
 
                         break;
                     }
-                // Tweet message
+                // User attempts to send Tweet
                 case 2:
                     {
                         try
@@ -109,23 +123,48 @@ namespace EustonLeisure
 
                         break;
                     }
-
+                // user attempts to load input from a file
                 case 3:
-                    var counter = 1;
-
-                    foreach (var message in _messagesFromFile)
+                    // check whether file contains any valid messages
+                    if (_messagesFromFile.Any())
                     {
-                        tbOutput.AppendText("MESSAGE #" + counter++ + "\n");
+                        var counter = 1;
 
-                        if (message.Value == null)
+                        // sort messages by MessageId to display them in groups
+                        var sortedDict = _messagesFromFile.OrderBy(o => o.Key.MessageId);
+                        var firstEmail = sortedDict.First(o => o.Key.MessageId.Contains("E"));
+                        var firstSms = sortedDict.First(o => o.Key.MessageId.Contains("S"));
+                        var firstTweet = sortedDict.First(o => o.Key.MessageId.Contains("T"));
+
+                        foreach (var message in sortedDict)
                         {
-                            tbOutput.AppendText("Invalid message format\r\n\r\n");
-                            _processedMessages.Add(message.Value);
+                            if (message.Equals(firstEmail))
+                                tbOutput.AppendText("---------------EMAIL MESSAGES---------------\n");
+                            if (message.Equals(firstSms))
+                                tbOutput.AppendText("----------------SMS MESSAGES----------------\n");
+                            if (message.Equals(firstTweet))
+                                tbOutput.AppendText("---------------TWEET MESSAGES---------------\n");
+
+                            tbOutput.AppendText("MESSAGE #" + counter++ + "\n");
+
+                            if (message.Value == null)
+                            {
+                                tbOutput.AppendText("Invalid message format\r\n\r\n");
+                                _processedMessages.Add(message.Value);
+                            }
+                            else
+                            {
+                                tbOutput.AppendText(message.Value + "\r\n\r\n");
+
+                                _processedMessages.Add(message.Value);
+                            }
                         }
-                        else
-                        {
-                            tbOutput.AppendText(message.Value + "\r\n\r\n");
-                        }
+
+                       
+                    }
+                    else
+                    {
+                        tbOutput.Text = Properties.Resources.NullError;
                     }
 
                     break;
@@ -135,7 +174,11 @@ namespace EustonLeisure
             tbOutput.ScrollToCaret();
         }
 
-        // clears all text boxes
+        /// <summary>
+        /// Clears all text boxes on the active tab.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnClear_Click(object sender, EventArgs e)
         {
             tbSender.Clear();
@@ -155,16 +198,22 @@ namespace EustonLeisure
             tbOutput.Clear();
         }
 
+        /// <summary>
+        /// Allows the user to browse for a file from where messages are to be loaded and attempts to read that file. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnBrowse_Click(object sender, EventArgs e)
         {
             DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
 
             tbFileUnprocessed.Clear();
 
+            // delete any messsages that were previously read from a file if there are any
             if (_messagesFromFile.Any())
                 _messagesFromFile.Clear();
 
-            if (result == DialogResult.OK) // Test result.
+            if (result == DialogResult.OK)
             {
                 tbOutput.Clear();
                 var path = openFileDialog1.FileName;
@@ -175,6 +224,7 @@ namespace EustonLeisure
 
                     var counter = 1;
 
+                    // show unprocessed messages from a file in a textbox
                     foreach (var message in _messagesFromFile)
                     {
                         tbFileUnprocessed.AppendText("MESSAGE #" + counter++ + "\n");
@@ -199,6 +249,11 @@ namespace EustonLeisure
                     Console.WriteLine(argumentException);
                     tbOutput.Text = Properties.Resources.InvalidInput;
                 }
+                catch (NullReferenceException nullException)
+                {
+                    Console.WriteLine(nullException);
+                    tbOutput.Text = Properties.Resources.NullError;
+                }
                 catch (Exception exception)
                 {
                     Console.WriteLine(exception);
@@ -207,6 +262,11 @@ namespace EustonLeisure
             }
         }
 
+        /// <summary>
+        /// Disables Sender textbox if tab for loading messages from a file is active.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TabMessageSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabMessageSelection.SelectedTab == tabFile)
@@ -221,6 +281,11 @@ namespace EustonLeisure
             }
         }
 
+        /// <summary>
+        /// Saves all processed messages from current input session to a file on the exit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Utils.SerializeToJson(_processedMessages);

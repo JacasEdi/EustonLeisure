@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EustonLeisure
 {
+    /// <summary>
+    /// Stores list of hashtags obtained from Tweet messages and displays them to the user.
+    /// </summary>
     public partial class TrendingForm : Form
     {
-        public static List<String> HashTags = new List<String>();
+        public static List<string> HashTags = new List<string>();
 
         public TrendingForm()
         {
@@ -20,6 +18,7 @@ namespace EustonLeisure
 
             StringBuilder sb = new StringBuilder();
 
+            // count number of uses for each hashtag and sort them from most to least used
             var groupedHashtags = HashTags.GroupBy(hashtag => hashtag)
                 .Select(countedTag => new { Hashtag = countedTag.Key, HashtagCount = countedTag.Count() })
                 .OrderByDescending(countedTag => countedTag.HashtagCount);

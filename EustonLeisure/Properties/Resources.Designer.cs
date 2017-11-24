@@ -79,6 +79,47 @@ namespace EustonLeisure.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No messages found.
+        /// </summary>
+        internal static string NullError {
+            get {
+                return ResourceManager.GetString("NullError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAP,Always a pleasure
+        ///AAR,At any rate
+        ///AAS,Alive and smiling
+        ///ADN,Any day now
+        ///AEAP,As early as possible
+        ///AFAIK,As far as I know
+        ///AFK,Away from keyboard
+        ///AKA,Also known as
+        ///AISB,As it should be
+        ///AOTA,All of the above
+        ///ASAP,As soon as possible
+        ///A/S/L,Age/sex/location
+        ///AT,At your terminal
+        ///ATM,At the moment
+        ///AYEC,At your earliest convenience
+        ///B/F,Boyfriend
+        ///B4,Before
+        ///B4N ,Bye for now
+        ///BAK,Back at keyboard
+        ///BAU,Business as usual
+        ///BBIAF,Be back in a few
+        ///BBIAM,Be back in a minute
+        ///BBL,Be back later
+        ///BBS,Be ba [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string textwords {
+            get {
+                return ResourceManager.GetString("textwords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wrong file format.
         /// </summary>
         internal static string WrongFileFormat {
